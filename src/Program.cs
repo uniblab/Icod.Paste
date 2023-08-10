@@ -69,6 +69,7 @@ namespace Icod.Paste {
 		private static void PrintUsage() {
 			System.Console.Error.WriteLine( "No, no, no! Use it like this, Einstein:" );
 			System.Console.Error.WriteLine( "Paste.exe --help" );
+			System.Console.Error.WriteLine( "Paste.exe --copyright" );
 			System.Console.Error.WriteLine( "Paste.exe [--output outputFilePathName]" );
 			System.Console.Error.WriteLine( "Paste.exe returns text from the clipboard." );
 			System.Console.Error.WriteLine( "outputFilePathName may be relative or absolute path." );
