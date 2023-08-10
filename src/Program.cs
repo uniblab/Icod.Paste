@@ -122,9 +122,11 @@ namespace Icod.Paste {
 						writer.WriteLine( datum );
 					}
 					writer.Flush();
+					writer.Close();
 				}
 				file.Flush();
 				file.SetLength( file.Position );
+				file.Close();
 			}
 		}
 		#endregion io
