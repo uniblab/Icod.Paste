@@ -35,7 +35,7 @@ namespace Icod.Paste {
 			}
 			System.String? outputPathName = null;
 			if ( 0 < len ) {
-				len = len - 1;
+				--len;
 				System.String @switch;
 				System.Int32 i = -1;
 				do {
@@ -116,7 +116,7 @@ namespace Icod.Paste {
 				throw new System.ArgumentNullException( nameof( filePathName ) );
 			}
 			using ( var file = System.IO.File.Open( filePathName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.None ) ) {
-				file.Seek( 0, System.IO.SeekOrigin.Begin );
+				_ = file.Seek( 0, System.IO.SeekOrigin.Begin );
 				using ( var writer = new System.IO.StreamWriter( file, System.Text.Encoding.UTF8, theBufferSize, true ) ) {
 					foreach ( var datum in data ) {
 						writer.WriteLine( datum );
