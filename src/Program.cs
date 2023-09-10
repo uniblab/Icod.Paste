@@ -25,42 +25,42 @@ namespace Icod.Paste {
 
 		[System.STAThread]
 		public static System.Int32 Main( System.String[] args ) {
-			if ( null == args ) {
-				args = new System.String[ 0 ];
-			}
 			var len = args.Length;
 			if ( 4 < len ) {
 				PrintUsage();
 				return 1;
 			}
-			System.String? outputPathName = null;
-			if ( 0 < len ) {
-				--len;
-				System.String @switch;
-				System.Int32 i = -1;
-				do {
-					@switch = args[ ++i ];
-					if ( new System.String[] { "--help", "-h", "/h" }.Contains( @switch, System.StringComparer.OrdinalIgnoreCase ) ) {
-						PrintUsage();
-						return 1;
-					} else if ( new System.String[] { "--copyright", "-c", "/c" }.Contains( @switch, System.StringComparer.OrdinalIgnoreCase ) ) {
-						PrintCopyright();
-						return 1;
-					} else if ( "--output".Equals( @switch, System.StringComparison.OrdinalIgnoreCase ) ) {
-						outputPathName = args[ ++i ].TrimToNull();
-					} else {
-						PrintUsage();
-						return 1;
-					}
-				} while ( i < len );
+
+			var processor = new Icod.Argh.Processor(
+				new Icod.Argh.Definition[] {
+					new Icod.Argh.Definition( "help", new System.String[] { "-h", "--help", "/help" } ),
+					new Icod.Argh.Definition( "copyright", new System.String[] { "-c", "--copyright", "/copyright" } ),
+					new Icod.Argh.Definition( "output", new System.String[] { "-o", "--output", "/output" } ),
+				},
+				System.StringComparer.OrdinalIgnoreCase
+			);
+			processor.Parse( args );
+
+			if ( processor.Contains( "help" ) ) {
+				PrintUsage();
+				return 1;
+			} else if ( processor.Contains( "copyright" ) ) {
+				PrintCopyright();
+				return 1;
 			}
 
 			System.Action<System.String?, System.Collections.Generic.IEnumerable<System.String>> writer;
-			if ( System.String.IsNullOrEmpty( outputPathName ) ) {
-				writer = ( a, b ) => WriteStdOut( b );
+			if ( processor.TryGetValue( "input", true, out var outputPathName ) ) {
+				if ( System.String.IsNullOrEmpty( outputPathName ) ) {
+					PrintUsage();
+					return 1;
+				} else {
+					writer = ( a, b ) => WriteFile( a!, b );
+				}
 			} else {
-				writer = ( a, b ) => WriteFile( a, b );
+				writer = ( a, b ) => WriteStdOut( b );
 			}
+
 			var text = new TextCopy.Clipboard().GetText() ?? System.String.Empty;
 			writer( outputPathName, new System.String[ 1 ] { text } );
 			return 0;
@@ -125,7 +125,7 @@ namespace Icod.Paste {
 		}
 		#endregion io
 
-		private static System.String? TrimToNull( this System.String @string ) {
+		private static System.String? TrimToNull( this System.String? @string ) {
 			if ( System.String.IsNullOrEmpty( @string ) ) {
 				return null;
 			}
