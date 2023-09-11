@@ -2,10 +2,10 @@
 Paste.exe returns text from the clipboard.
 
 ## Usage
-`Paste.exe --help`
+`Paste.exe (-h | --help | /help)`
 Displays this text.
 
-`Paste.exe --copyright`
+`Paste.exe (-c | --copyright | /copyright)`
 Displays copyright and licensing information.
 
 `Paste.exe [--output outputFilePathName]`
